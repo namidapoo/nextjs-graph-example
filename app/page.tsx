@@ -9,16 +9,13 @@ type PageProps = {
 };
 
 const Page: FC<PageProps> = async ({ searchParams }) => {
-	const parsedSearchParams = await searchParamsCache.parse(searchParams);
+	await searchParamsCache.parse(searchParams);
 
 	return (
 		<main className="mx-auto min-h-screen max-w-6xl p-4 md:px-6 lg:px-8">
 			<h1 className="font-bold text-2xl">日本の都道府県別人口推移</h1>
 			<PrefectureSelector />
-			<Suspense
-				fallback={<div>Loading...</div>}
-				key={JSON.stringify(parsedSearchParams)}
-			>
+			<Suspense fallback={<div>Loading...</div>}>
 				<GraphView />
 			</Suspense>
 		</main>
