@@ -8,5 +8,6 @@ export const ClientOnlyGraphViewPresentation = dynamic(
 		),
 	{
 		ssr: false,
+		loading: () => <div>Loading...</div>,
 	},
 );
