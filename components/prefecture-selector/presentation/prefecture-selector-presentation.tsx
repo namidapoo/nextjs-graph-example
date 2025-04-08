@@ -51,7 +51,7 @@ export const PrefectureSelectorPresentation: FC<Props> = ({ prefectures }) => {
 	};
 
 	return (
-		<div className="p-4">
+		<div>
 			<div className="mb-3 flex items-center justify-between">
 				<p className="text-gray-600 text-sm" aria-live="polite">
 					選択済み: <span className="font-medium">{selectedCount}</span> / 47

@@ -2,12 +2,18 @@ import { getPopulation } from "@/api/getPopulation";
 import { getPrefectures } from "@/api/getPrefectures";
 import { searchParamsCache } from "@/lib/search-params";
 import type { FC } from "react";
-import { ClientOnlyGraphViewPresentation as GraphViewPresentation } from "../presentation/wrapper";
+import { GraphViewPresentation } from "../presentation/graph-view-presentation";
 
 export const GraphView: FC = async () => {
 	const searchParams = searchParamsCache.all();
 	if (searchParams.prefCodes.length === 0) {
-		return null;
+		return (
+			<GraphViewPresentation
+				population={[]}
+				prefectures={[]}
+				selectedPrefCodes={[]}
+			/>
+		);
 	}
 
 	// 都道府県一覧と人口データを並行して取得

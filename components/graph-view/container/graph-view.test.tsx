@@ -45,20 +45,6 @@ describe("GraphView", () => {
 		expect(getPopulation).toHaveBeenCalledWith(2);
 	});
 
-	it("prefCodes が存在しない場合は null を返す", async () => {
-		// Arrange
-		vi.spyOn(searchParamsCache, "all").mockReturnValue({
-			prefCodes: [],
-		});
-		// Act
-		const { container } = render(await GraphView({}), {
-			wrapper: withNuqsTestingAdapter(),
-		});
-		// Assert
-		expect(container.firstChild).toBeNull();
-		expect(getPopulation).not.toHaveBeenCalled();
-	});
-
 	it("API 呼び出しが失敗した場合はエラーをスローする", async () => {
 		// Arrange
 		// searchParamsCache.all() が { prefCodes: [1] } を返すようにモック
