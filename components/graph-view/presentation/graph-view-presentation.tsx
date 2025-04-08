@@ -148,7 +148,6 @@ export const GraphViewPresentation: FC<Props> = ({
 				...baseOtions.xAxis.labels,
 				enabled: !showEmptyState,
 			},
-			gridLineWidth: showEmptyState ? 0 : 1,
 			lineWidth: showEmptyState ? 0 : 1,
 			tickWidth: showEmptyState ? 0 : 1,
 		},
