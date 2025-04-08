@@ -7,7 +7,13 @@ import { ClientOnlyGraphViewPresentation as GraphViewPresentation } from "../pre
 export const GraphView: FC = async () => {
 	const searchParams = searchParamsCache.all();
 	if (searchParams.prefCodes.length === 0) {
-		return null;
+		return (
+			<GraphViewPresentation
+				population={[]}
+				prefectures={[]}
+				selectedPrefCodes={[]}
+			/>
+		);
 	}
 
 	// 都道府県一覧と人口データを並行して取得

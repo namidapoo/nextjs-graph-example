@@ -106,6 +106,7 @@ export const GraphViewPresentation: FC<Props> = ({
 	prefectures,
 	selectedPrefCodes,
 }) => {
+	const showEmptyState = selectedPrefCodes.length === 0;
 	const series = population
 		.map((popData, index) => {
 			const prefCode = selectedPrefCodes[index];
@@ -137,6 +138,32 @@ export const GraphViewPresentation: FC<Props> = ({
 	const options = {
 		...baseOtions,
 		series,
+		xAxis: {
+			...baseOtions.xAxis,
+			title: {
+				...baseOtions.xAxis.title,
+				text: showEmptyState ? "" : "年度",
+			},
+			labels: {
+				...baseOtions.xAxis.labels,
+				enabled: !showEmptyState,
+			},
+			gridLineWidth: showEmptyState ? 0 : 1,
+			lineWidth: showEmptyState ? 0 : 1,
+			tickWidth: showEmptyState ? 0 : 1,
+		},
+		yAxis: {
+			...baseOtions.yAxis,
+			title: {
+				...baseOtions.yAxis.title,
+				text: showEmptyState ? "" : "人口 (万人)",
+			},
+			labels: {
+				...baseOtions.yAxis.labels,
+				enabled: !showEmptyState,
+			},
+			gridLineWidth: showEmptyState ? 0 : 1,
+		},
 	};
 
 	return (
@@ -147,9 +174,39 @@ export const GraphViewPresentation: FC<Props> = ({
 				borderRadius: "8px",
 				boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
 				backgroundColor: "#fff",
+				position: "relative",
+				minHeight: "400px",
 			}}
 		>
 			<HighchartsReact highcharts={Highcharts} options={options} />
+
+			{showEmptyState && (
+				<div
+					style={{
+						position: "absolute",
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						flexDirection: "column",
+						gap: "12px",
+					}}
+				>
+					<p
+						style={{
+							fontSize: "16px",
+							color: "#666",
+							textAlign: "center",
+							fontWeight: "500",
+						}}
+					>
+						都道府県を選択してください
+					</p>
+				</div>
+			)}
 		</div>
 	);
 };
