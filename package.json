@@ -18,11 +18,12 @@
 	},
 	"dependencies": {
 		"clsx": "^2.1.1",
+		"highcharts": "^12.2.0",
+		"highcharts-react-official": "^3.2.1",
 		"next": "15.2.4",
 		"nuqs": "^2.4.1",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"recharts": "^2.15.2",
 		"server-only": "^0.0.1",
 		"tailwind-merge": "^3.1.0"
 	},
@@ -54,7 +55,6 @@
 		"lefthook": "^1.11.6",
 		"playwright": "^1.51.1",
 		"prettier": "^3.5.3",
-		"resize-observer-polyfill": "^1.5.1",
 		"storybook": "^8.6.12",
 		"tailwindcss": "^4",
 		"typescript": "^5",

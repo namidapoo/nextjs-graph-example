@@ -11,7 +11,7 @@ const { WithData } = composeStories(stories);
 describe("表示の確認", () => {
 	it("レンダリングが成功する", () => {
 		// Arrange, Act, Assert
-		// Recharts内部の描画はライブラリ側の責務なので、ここではレンダリングに成功することだけ確認する
+		// HighchartsReact内部の描画はライブラリ側の責務なので、ここではレンダリングに成功することだけ確認する
 		render(
 			<WithData
 				selectedPrefCodes={[13]}
