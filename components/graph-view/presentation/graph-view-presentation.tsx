@@ -25,12 +25,7 @@ const baseOtions = {
 		spacingRight: 20,
 	},
 	title: {
-		text: "都道府県の人口推移",
-		style: {
-			fontSize: "18px",
-			fontWeight: "bold",
-			margin: "20px",
-		},
+		text: "",
 	},
 	xAxis: {
 		title: { text: "年度", margin: 15 },
@@ -44,26 +39,26 @@ const baseOtions = {
 	},
 	yAxis: {
 		title: {
-			text: "人口数",
-			margin: 15,
+			text: "人口 (万人)",
+			margin: 8,
 		},
 		labels: {
 			formatter: function () {
-				return `${Highcharts.numberFormat(this.value as number, 0, "", ",")}人`;
+				return `${Highcharts.numberFormat((this.value as number) / 10000, 0, ".", ",")}`;
 			},
 			style: {
-				fontSize: "12px",
+				fontSize: "10px",
 			},
 		},
 	},
 	tooltip: {
 		headerFormat:
-			'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 20px;">' +
+			'<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 12px;">' +
 			'<span style="font-size: 13px; font-weight: bold; color: {point.color}; max-width: 70%;">{series.name}</span>' +
 			'<span style="font-size: 12px; color: #666; min-width: 50px; text-align: right;">{point.x}年</span>' +
 			"</div>",
 		pointFormat:
-			'<div style="font-size: 12px; font-weight: bold; text-align: center;">{point.y:,.0f}人</div>',
+			'<div style="font-size: 12px; font-weight: bold;">{point.y:,.0f}人</div>',
 		backgroundColor: "rgba(255, 255, 255, 0.95)",
 		borderWidth: 1,
 		borderRadius: 8,
@@ -81,10 +76,24 @@ const baseOtions = {
 					maxWidth: 600,
 				},
 				chartOptions: {
+					chart: {
+						spacingLeft: 0,
+						spacingRight: 0,
+					},
 					legend: {
 						layout: "horizontal",
 						align: "center",
 						verticalAlign: "bottom",
+					},
+					yAxis: {
+						title: {
+							margin: 5,
+						},
+						labels: {
+							style: {
+								fontSize: "9px",
+							},
+						},
 					},
 				},
 			},
