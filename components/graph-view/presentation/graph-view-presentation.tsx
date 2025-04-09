@@ -1,11 +1,13 @@
 "use client";
 
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import type { FC } from "react";
-import "highcharts/modules/accessibility.js";
+import Highcharts from "highcharts/es-modules/masters/highcharts.src.js";
+import "highcharts/es-modules/masters/highcharts-more.src.js";
+import "highcharts/es-modules/masters/modules/exporting.src.js";
+import "highcharts/es-modules/masters/modules/accessibility.src.js";
 import type { getPopulation } from "@/api/getPopulation";
 import type { getPrefectures } from "@/api/getPrefectures";
+import HighchartsReact from "highcharts-react-official";
+import type { FC } from "react";
 
 type PopulationData = Awaited<ReturnType<typeof getPopulation>>;
 type Prefecture = Awaited<ReturnType<typeof getPrefectures>>[number];
