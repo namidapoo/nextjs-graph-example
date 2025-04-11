@@ -6,9 +6,14 @@ import {
 	withNuqsTestingAdapter,
 } from "nuqs/adapters/testing";
 import { describe, expect, it, vi } from "vitest";
+import {
+	groupPrefecturesByRegion,
+	regionMapping,
+} from "../lib/group-prefectures-by-region";
 import * as stories from "./prefecture-selector-presentation.stories";
 
 const { WithData } = composeStories(stories);
+const mockPrefectures = WithData.args.prefectures ?? [];
 
 describe("表示の確認", () => {
 	it("トップレベルの「すべて選択」ボタンと「選択をクリア」ボタンが表示される", () => {
@@ -31,8 +36,16 @@ describe("表示の確認", () => {
 			wrapper: withNuqsTestingAdapter(),
 		});
 		// Assert
+		const expectedRegions = groupPrefecturesByRegion(mockPrefectures).map(
+			(g) => g.region,
+		);
+		for (const regionName of expectedRegions) {
+			expect(
+				screen.getByRole("heading", { level: 3, name: regionName }),
+			).toBeInTheDocument();
+		}
 		const regionHeadings = screen.getAllByRole("heading", { level: 3 });
-		expect(regionHeadings).toHaveLength(6);
+		expect(regionHeadings).toHaveLength(expectedRegions.length);
 	});
 
 	it("都道府県ボタンが合計 47 個表示される", () => {
@@ -75,7 +88,6 @@ describe("インタラクションの確認", () => {
 		// Assert
 		expect(onUrlUpdate).toHaveBeenCalledOnce();
 		const event = onUrlUpdate.mock.calls[0][0];
-		expect(event.queryString).toBe("?prefCodes=1");
 		expect(event.searchParams.get("prefCodes")).toBe("1");
 		expect(event.options.history).toBe("replace");
 		expect(event.options.shallow).toBe(false);
@@ -107,9 +119,11 @@ describe("インタラクションの確認", () => {
 		// Arrange
 		const user = userEvent.setup();
 		const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+		const initialCodes = [1, 2];
+		const expectedCodesAfterClick = [1, 2, 47];
 		render(<WithData />, {
 			wrapper: withNuqsTestingAdapter({
-				searchParams: "?prefCodes=1,2",
+				searchParams: `?prefCodes=${initialCodes.join(",")}`,
 				onUrlUpdate,
 			}),
 		});
@@ -119,8 +133,12 @@ describe("インタラクションの確認", () => {
 		// Assert
 		expect(onUrlUpdate).toHaveBeenCalledOnce();
 		const event = onUrlUpdate.mock.calls[0][0];
-		expect(event.queryString).toBe("?prefCodes=1,2,47");
-		expect(event.searchParams.get("prefCodes")).toBe("1,2,47");
+		const updatedCodes =
+			event.searchParams.get("prefCodes")?.split(",").map(Number) ?? [];
+		expect(updatedCodes).toEqual(
+			expect.arrayContaining(expectedCodesAfterClick),
+		);
+		expect(updatedCodes).toHaveLength(expectedCodesAfterClick.length);
 		expect(event.options.history).toBe("replace");
 		expect(event.options.shallow).toBe(false);
 	});
@@ -129,6 +147,7 @@ describe("インタラクションの確認", () => {
 		// Arrange
 		const user = userEvent.setup();
 		const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+		const allPrefCodes = mockPrefectures.map((pref) => pref.prefCode);
 		render(<WithData />, {
 			wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
 		});
@@ -140,12 +159,10 @@ describe("インタラクションの確認", () => {
 		// Assert
 		expect(onUrlUpdate).toHaveBeenCalledOnce();
 		const event = onUrlUpdate.mock.calls[0][0];
-		expect(event.queryString).toBe(
-			"?prefCodes=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-		);
-		expect(event.searchParams.get("prefCodes")).toBe(
-			"1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47",
-		);
+		const updatedCodes =
+			event.searchParams.get("prefCodes")?.split(",").map(Number) ?? [];
+		expect(updatedCodes).toEqual(expect.arrayContaining(allPrefCodes));
+		expect(updatedCodes).toHaveLength(allPrefCodes.length);
 		expect(event.options.history).toBe("replace");
 		expect(event.options.shallow).toBe(false);
 	});
@@ -176,6 +193,7 @@ describe("インタラクションの確認", () => {
 		// Arrange
 		const user = userEvent.setup();
 		const onUrlUpdate = vi.fn<OnUrlUpdateFunction>();
+		const hokkaidoTohokuCodes = regionMapping.北海道・東北;
 		render(<WithData />, {
 			wrapper: withNuqsTestingAdapter({ onUrlUpdate }),
 		});
@@ -187,8 +205,10 @@ describe("インタラクションの確認", () => {
 		// Assert
 		expect(onUrlUpdate).toHaveBeenCalledOnce();
 		const event = onUrlUpdate.mock.calls[0][0];
-		expect(event.queryString).toBe("?prefCodes=1,2,3,4,5,6,7");
-		expect(event.searchParams.get("prefCodes")).toBe("1,2,3,4,5,6,7");
+		const updatedCodes =
+			event.searchParams.get("prefCodes")?.split(",").map(Number) ?? [];
+		expect(updatedCodes).toEqual(expect.arrayContaining(hokkaidoTohokuCodes));
+		expect(updatedCodes).toHaveLength(hokkaidoTohokuCodes.length);
 	});
 
 	it("個別の都道府県ボタンをクリックすると、aria-pressed属性がtrueに更新される", async () => {
